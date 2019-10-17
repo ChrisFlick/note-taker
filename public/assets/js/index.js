@@ -1,14 +1,8 @@
-const fs = require("fs")
-const util = require('util')
-const path = require('path')
-
-const writeFileAsync = util.promisify(fs.writeFile)
-
-// var $noteTitle = $(".note-title");
-// var $noteText = $(".note-textarea");
-// var $saveNoteBtn = $(".save-note");
+var $noteTitle = $(".note-title");
+var $noteText = $(".note-textarea");
+var $saveNoteBtn = $(".save-note");
 // var $newNoteBtn = $(".new-note");
-// var $noteList = $(".list-container .list-group");
+var $noteList = $(".list-container .list-group");
 
 // activeNote is used to keep track of the note in the textarea
 var activeNote = {};
@@ -16,29 +10,21 @@ var activeNote = {};
 
 // A function for getting all notes from the db
 var getNotes = function () {
-    let db = require("../../../db/db.json")
-    return db;
 };
 
 // A function for saving a note to the db
 var saveNote = function (note) {
-    let db = getNotes();
-    db.push(activeNote)
-
-    writeFileAsync(path.join(__dirname, '../../../db/db.json'), JSON.stringify(db))
 };
 
 // A function for deleting a note from the db
-var deleteNote = function (title) {
-    let db = getNotes()
-    let pos = db.map(function (e) { return e.title; }).indexOf(title)
-    
-    db.splice(pos, 1)
-    writeFileAsync(path.join(__dirname, '../../../db/db.json'), JSON.stringify(db))
+var deleteNote = function (note) {
+
+
 }
 
 // If there is an activeNote, display it, otherwise render empty inputs
 var renderActiveNote = function () {
+
 
 };
 
@@ -75,17 +61,38 @@ var renderNoteList = function (notes) {
 
 // Gets notes from the db and renders them to the sidebar
 var getAndRenderNotes = function () {
+    $.ajax({
+        type: "GET",
+        url: "/api/db"
+    }).then(res => {
+        for (let i = 0; i < res.length; i++) {
+            let $note = $('<div>')
+            let $title = $('<div>')
+            let $text = $('<div>')
 
+            $note.attr('class', 'card')
+
+            $title.text(res[i].title);
+            $title.attr('class', 'note-title')
+
+
+            $text.text(res[i].text)
+            $text.attr('class', 'not-textarea')
+
+            $note.append($title);
+            $note.append($text);
+
+            $('#noteList').append($note)
+        }
+    })
 };
 
 // $saveNoteBtn.on("click", handleNoteSave);
-// $noteList.on("click", ".list-group-item", handleNoteView);
+$noteList.on("click", ".list-group-item", handleNoteView);
 // $newNoteBtn.on("click", handleNewNoteView);
-// $noteList.on("click", ".delete-note", handleNoteDelete);
-// $noteTitle.on("keyup", handleRenderSaveBtn);
-// $noteText.on("keyup", handleRenderSaveBtn);
+$noteList.on("click", ".delete-note", handleNoteDelete);
+$noteTitle.on("keyup", handleRenderSaveBtn);
+$noteText.on("keyup", handleRenderSaveBtn);
 
-// Gets and renders the initial list of notes
-// getAndRenderNotes();
-
-deleteNote('test')
+//Gets and renders the initial list of notes
+getAndRenderNotes();

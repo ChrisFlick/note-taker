@@ -25,44 +25,36 @@
       <br>
 
       <div class="text-center">
-        <a href="/tables"><button class="btn btn-lg btn-primary"><span class="fa fa-list-alt"></span> View Tables</button></a>
+        <a href="/notes"><button class="btn btn-lg btn-primary"><span class="fa fa-list-alt"></span> View
+            Notes</button></a>
         <a href="/"><button class="btn btn-lg btn-default"><span><i class="fas fa-home"></i></span></button></a>
       </div>
 
     </div>
 
     <div class="card">
-        <div class="card-header">
-          <strong>Table Reservation</strong>
-        </div>
-        <div class="card-body">
-            <form id="customer">
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Name</label>
-                  <input type="text" class="form-control" id="reserve-name" aria-describedby="emailHelp">
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputPassword1">Phone Number</label>
-                  <input type="text" class="form-control" id="reserve-phone">
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputPassword1">Email</label>
-                  <input type="text" class="form-control" id="reserve-email">
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputPassword1">Unique ID</label>
-                  <input type="text" class="form-control" id="reserve-unique-id">
-                </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-              </form>
-        </div>
+      <div class="card-header">
+        <strong>Take a note.</strong>
       </div>
-    
+      <div class="card-body">
+        <form id="note">
+          <div class="form-group">
+            <label>Title</label>
+            <input type="text" class="form-control" id="title">
+          </div>
+          <div class="form-group">
+            <label>Note:</label>
+            <input type="textarea" class="form-control" id=text>
+          </div>
+          <input type="submit">
+      </div>
+    </div>
+
 
 
     <footer class="footer">
       <div class="container">
-        <p><a href="/api/tables">API Table Link</a> | <a href="/api/waitlist">API Wait List</a>
+        <p><a href="/api/db">API Notes</a>
       </div>
     </footer>
 
@@ -70,40 +62,6 @@
 
 </body>
 
+<script type="text/javascript" src="/makeNotesJS"></script>
+
 </html>
-
-<script type="text/javascript">
-
-  $("#customer").on("submit", function(event) {
-    event.preventDefault();
-    
-      let newReservation = {
-        customerName: $("#reserve-name").val(),
-        phoneNumber: $("#reserve-phone").val(),
-        customerEmail: $("#reserve-email").val(),
-        customerID: $("#reserve-unique-id").val()
-      };
-      console.log(newReservation)
-
-
-    $.post("/api/tables", newReservation,
-      function(data) {
-
-        // If a table is available... tell user they are booked.
-        if (data) {
-          alert(`Thank you for reserving a table with us ${newReservation.customerName}!`)
-        }
-        // If a table is available... tell user they on the waiting list.
-        else {
-          alert(`Sorry ${newReservation.customerName}, you have been put on the wait list.`)
-        }
-        // Clear the form when submitting
-        $("#reserve-name").val("");
-        $("#reserve-phone").val("");
-        $("#reserve-email").val("");
-        $("#reserve-unique-id").val("");
-      });
-
-  });
-
-</script>

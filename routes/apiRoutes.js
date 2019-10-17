@@ -5,22 +5,37 @@ const path = require('path')
 
 const writeFileAsync = util.promisify(fs.writeFile)
 
-module.exports = function(app) {
+module.exports = function (app) {
 
-    app.get('/api/db', function(req, res) {
+    app.get('/api/db', function (req, res) {
         res.json(db);
     });
 
-    app.post("/api/db", function(req, res) {
-       let note = req.body;
-       
-       console.log(`Adding note: ${note.title}`);
-       db.push(note);
+    app.post("/api/db", function (req, res) {
+        let note = req.body;
 
-       writeFileAsync(path.join(__dirname,'../db/db.json'), JSON.stringify(db))
-        .then(() => {
-            console.log('Jobs done!')
-        })
+        console.log(`Adding note: ${note.title}`);
+        db.push(note);
+
+        writeFileAsync(path.join(__dirname, '../db/db.json'), JSON.stringify(db))
+            .then(() => {
+                console.log('Jobs done!')
+            })
         res.json(note)
     });
+
+    app.delete('/api/db', function (req, res) {
+        let title = req.body.title
+        console.log(`Deleting ${title}`)
+
+        let pos = db.map(function (e) { return e.title; }).indexOf(title)
+        db.splice(pos, 1)
+
+        writeFileAsync(path.join(__dirname, '../db/db.json'), JSON.stringify(db))
+            .then(() => {
+                console.log(`Jobs done`)
+            })
+
+        res.json(title)
+    })
 }
