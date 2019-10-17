@@ -13,6 +13,8 @@ module.exports = function (app) {
 
     app.post("/api/db", function (req, res) {
         let note = req.body;
+        note.id = db.length
+        console.log(note.id)
 
         console.log(`Adding note: ${note.title}`);
         db.push(note);
@@ -25,10 +27,10 @@ module.exports = function (app) {
     });
 
     app.delete('/api/db', function (req, res) {
-        let title = req.body.title
-        console.log(`Deleting ${title}`)
+        let id = req.body
+        console.log(`Deleting ${id}`)
 
-        let pos = db.map(function (e) { return e.title; }).indexOf(title)
+        let pos = db.map(function (e) { return e.id; }).indexOf(id)
         db.splice(pos, 1)
 
         writeFileAsync(path.join(__dirname, '../db/db.json'), JSON.stringify(db))
@@ -36,6 +38,6 @@ module.exports = function (app) {
                 console.log(`Jobs done`)
             })
 
-        res.json(title)
+        res.json(id)
     })
 }

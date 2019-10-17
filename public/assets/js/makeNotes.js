@@ -1,6 +1,5 @@
 $(document).ready( () => {
     $('#note').on('submit', function() {
-        event.preventDefault();
         let note = {}
 
         note.title = $('#title').val();

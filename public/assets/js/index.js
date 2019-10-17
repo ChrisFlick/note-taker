@@ -2,7 +2,7 @@ var $noteTitle = $(".note-title");
 var $noteText = $(".note-textarea");
 var $saveNoteBtn = $(".save-note");
 // var $newNoteBtn = $(".new-note");
-var $noteList = $(".list-container .list-group");
+var $noteList = $("#noteList");
 
 // activeNote is used to keep track of the note in the textarea
 var activeNote = {};
@@ -35,6 +35,13 @@ var handleNoteSave = function () {
 
 // Delete the clicked note
 var handleNoteDelete = function (event) {
+    $.ajax({
+        type: 'DELETE',
+        url: "/api/db",
+        data: { id: $(this).attr('id') }
+    }).then(function() {
+        getAndRenderNotes();
+    })
 
 };
 
@@ -65,34 +72,41 @@ var getAndRenderNotes = function () {
         type: "GET",
         url: "/api/db"
     }).then(res => {
+        $('#noteList').html('') // Reset noteList
+
         for (let i = 0; i < res.length; i++) {
             let $note = $('<div>')
             let $title = $('<div>')
             let $text = $('<div>')
+            let $delBtn = $('<button>')
 
             $note.attr('class', 'card')
 
             $title.text(res[i].title);
             $title.attr('class', 'note-title card-header')
-
+            $title.attr('id', `title${i}`)
 
             $text.text(res[i].text)
             $text.attr('class', 'not-textarea card-body')
 
+
+            $delBtn.text('Delete')
+            $delBtn.attr('class', 'delete-note');
+            $delBtn.attr('id', res[i].id)
+
             $note.append($title);
             $note.append($text);
+            $note.append($delBtn)
 
+            
             $('#noteList').append($note)
         }
     })
 };
 
-// $saveNoteBtn.on("click", handleNoteSave);
+
 $noteList.on("click", ".list-group-item", handleNoteView);
-// $newNoteBtn.on("click", handleNewNoteView);
 $noteList.on("click", ".delete-note", handleNoteDelete);
-$noteTitle.on("keyup", handleRenderSaveBtn);
-$noteText.on("keyup", handleRenderSaveBtn);
 
 //Gets and renders the initial list of notes
 getAndRenderNotes();
