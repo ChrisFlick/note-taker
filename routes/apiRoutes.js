@@ -27,11 +27,10 @@ module.exports = function (app) {
     });
 
     app.delete('/api/db', function (req, res) {
-        let id = req.body
+        let id = req.body.id
         console.log(`Deleting ${id}`)
 
-        let pos = db.map(function (e) { return e.id; }).indexOf(id)
-        db.splice(pos, 1)
+        db.splice(id, 1)
 
         writeFileAsync(path.join(__dirname, '../db/db.json'), JSON.stringify(db))
             .then(() => {

@@ -38,7 +38,7 @@ var handleNoteDelete = function (event) {
     $.ajax({
         type: 'DELETE',
         url: "/api/db",
-        data: { id: $(this).attr('id') }
+        data: {id: $(this).attr('id')} 
     }).then(function() {
         getAndRenderNotes();
     })
@@ -92,7 +92,7 @@ var getAndRenderNotes = function () {
 
             $delBtn.text('Delete')
             $delBtn.attr('class', 'delete-note');
-            $delBtn.attr('id', res[i].id)
+            $delBtn.attr('id', i)
 
             $note.append($title);
             $note.append($text);
