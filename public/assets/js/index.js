@@ -73,11 +73,11 @@ var getAndRenderNotes = function () {
             $note.attr('class', 'card')
 
             $title.text(res[i].title);
-            $title.attr('class', 'note-title')
+            $title.attr('class', 'note-title card-header')
 
 
             $text.text(res[i].text)
-            $text.attr('class', 'not-textarea')
+            $text.attr('class', 'not-textarea card-body')
 
             $note.append($title);
             $note.append($text);
