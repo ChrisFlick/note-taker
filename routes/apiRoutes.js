@@ -13,8 +13,6 @@ module.exports = function (app) {
 
     app.post("/api/db", function (req, res) {
         let note = req.body;
-        note.id = db.length
-        console.log(note.id)
 
         console.log(`Adding note: ${note.title}`);
         db.push(note);
